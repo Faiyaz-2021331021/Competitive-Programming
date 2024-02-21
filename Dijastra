@@ -1,17 +1,9 @@
+///Dijastra
+///https://vjudge.net/problem/AtCoder-abc340_d
+
 #include<bits/stdc++.h>
 using namespace std;
-#define int            long long
-#define pb             push_back
-#define el             '\n'
-#define pp             pair<int,pair<int,int>>
-#define asort(a,n)     sort(a,a+n) 
-#define vsort(v)       sort(v.begin(),v.end())
-#define vrsort(v)      sort(v.rbegin(),v.rend());
-const int N = 999999;
-vector<int>arr[N];
-int vis[N];
-int par[N];
-map<pair<int,int>,int>mp;
+#define int long long
 void edm()
 {
     ios::sync_with_stdio(false);cin.tie(nullptr);cout.tie(nullptr);
@@ -20,59 +12,45 @@ void edm()
     freopen("output.txt","w",stdout);
     #endif
 }
-int dijstra(int s,int d)
+void solve()
 {
-    vector<int>dist(100005,1e18);
+    int n;cin>>n;
+    vector<vector<pair<int, int>>> arr(n + 5);
+    for(int i=1;i<=n-1;i++)
+    {
+        int a,b,c;cin>>a>>b>>c;
+        arr[i].push_back({i+1,a});
+        arr[i].push_back({c,b});
+    }
+    vector<int>dist(500005,1e18);
+    pair<int,int>p;
     priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;
-    pq.push({0,s});
-    dist[s]=0;
+    pq.push({0,1});
+    dist[1]=0;
     while(!pq.empty())
     {
-        auto curnode = pq.top();
+        pair<int,int>cur = pq.top();
         pq.pop();
-        for(auto i:arr[curnode.second])
+        int u = cur.second;
+        if(cur.first > dist[u])continue;
+        for(auto i:arr[u])
         {
-            if(dist[i] > dist[curnode.second] + mp[{curnode.second,i}]);
+            int v = i.first;
+            int w = i.second;
+            if(dist[v] > dist[u] + w)
             {
-                dist[i] = dist[curnode.second] + mp[{curnode.second,i}];
-                pq.push({dist[i],i});
+                dist[v] = dist[u] + w;
+                pq.push({dist[v],v});
             }
         }
     }
-    return dist[d];
-}
-void solve()
-{
-    int n,m;cin>>n>>m;
-    for(int i=0;i<m;i++)
-    {
-        int a,b,c;cin>>a>>b>>c;
-        pair<int,int>p;
-        p.first=a;
-        p.second=b;
-        mp.insert({p,c});
-        arr[a].pb(b);
-        //arr[b].push_back(a);
-    }
-    /*for(auto it:mp)
-    {
-        cout<<it.first.first<<" "<<it.first.second<<" "<<it.second<<endl;
-    }*/
-    int s,d;cin>>s>>d;
-    int dd = dijstra(s,d);
-    if(dd==1e18)cout<<"NO"<<endl;
-    else cout<<dd<<endl;
-    for(int i=0;i<=100005;i++)
-    {
-        arr[i].clear();
-    }
-    mp.clear();
+    cout<<dist[n]<<endl;
 }
 signed main()
 {
     edm();
-    int t = 1;
-    cin>>t;
+    int t;t = 1;
+    //cin>>t;
     for(int i=1;i<=t;i++)
     {
         ///cout<<"Case "<<i<<": ";
