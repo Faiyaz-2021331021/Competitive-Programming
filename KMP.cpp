@@ -41,7 +41,6 @@ vector<int> build_lps(string p)
         }
         j++;
         lps[i] = j;
-        ///lps[i] = j; to avoid overlapping
     }
     return lps;
 }
@@ -61,6 +60,7 @@ vector<int>getpos(vector<int>lps, string s, string p)
     if(j == psz)
     {
         j = lps[j - 1];
+        /// j = 0; to avoid overlapping
         ans.push_back(i - psz + 1);
     }
   }
