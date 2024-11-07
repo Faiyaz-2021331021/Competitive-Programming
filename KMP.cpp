@@ -41,6 +41,7 @@ vector<int> build_lps(string p)
         }
         j++;
         lps[i] = j;
+        ///lps[i] = j; to avoid overlapping
     }
     return lps;
 }
