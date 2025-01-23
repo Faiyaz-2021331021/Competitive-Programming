@@ -1,10 +1,11 @@
-///https://www.spoj.com/problems/GOODA/
+///https://cses.fi/problemset/task/1686/
 
 #include<bits/stdc++.h>
 using namespace std;
 #define int             long long
 #define pb              push_back
 #define endl            '\n'
+#define debug           cout<<"HERE"<<endl;
 #define ff              first
 #define ss              second
 void edm()
@@ -20,6 +21,9 @@ vector<int>g[N],gt[N],gm[N];
 int vis[N];
 int arr[N];
 int par[N];
+int mx[N];
+int temp[N];
+int v[N];
 void dfs1(int n,vector<int>&s)
 {
     vis[n]=1;
@@ -45,9 +49,22 @@ void dfs2(int &n,int &who,int &sum)
         }
     }
 }
+int dfs3(int n)
+{
+    if(mx[n]!=-1)return mx[n];
+    int val = 0;
+    for(auto i:gm[n])
+    {
+        //cout<<i<<endl;
+        val = max(val,dfs3(i));
+    }
+    //cout<<n<<" "<<v[n] + val<<endl;
+    mx[n] = v[n] + val;
+    return mx[n];
+}
 void solve()
 {
-    int n,m,s,t;cin>>n>>m>>s>>t;
+    int n,m;cin>>n>>m;
     for(int i=1;i<=n;i++)
     {
         cin>>arr[i];
@@ -66,18 +83,16 @@ void solve()
     }
     for(int i=1;i<=n;i++)vis[i]=0;
     reverse(st.begin(),st.end());
-    vector<int>v(n+1,0);
     int cnt=0;
     for(auto i:st)
     {
         if(vis[i]==0)
         {
-
             cnt++;
             int sum=0;
-            dfs2(i,i,sum);
-            v[i] = sum;
-            //cout<<i<<" "<<par[i]<<endl;
+            dfs2(i,cnt,sum);
+            v[cnt] = sum;
+            //cout<<cnt<<" "<<v[cnt]<<endl;
         }
     }
     for(int i=1;i<=n;i++)gt[i].clear();
@@ -92,34 +107,23 @@ void solve()
             }
         }
     }
-    priority_queue<pair<int,int>>p;
-    p.push({par[s],v[par[s]]});
-    vector<int>dist(n+1,0);
-    dist[par[s]] = v[par[s]];
-    // for(int i=1;i<=n;i++)
-    // {
-    //     cout<<par[i]<<endl;
-    // }
-    // for(int i=1;i<=n;i++)
-    // {
-    //     for(auto j:gt[i])cout<<j<<" ";
-    //         cout<<endl;
-    // }
-    while (!p.empty())
+    for(int i=1;i<=cnt;i++)
     {
-        auto node = p.top();
-        p.pop();
-        int curr = node.first; 
-        for (auto next : gm[curr])
+        mx[i] = -1;
+    }
+    int ans=0;
+    for(int i=1;i<=cnt;i++)
+    {
+        if(mx[i]==-1)
         {
-            if (dist[next] < dist[curr] + v[next])
-            {
-                dist[next] = dist[curr] + v[next];
-                p.push({next, dist[next]});
-            }
+            dfs3(i);
         }
     }
-    cout<<dist[par[t]];
+    for(int i=1;i<=cnt;i++)
+    {
+        ans = max(ans,mx[i]);
+    }
+    cout<<ans<<endl;
 }
 int32_t main()
 {
