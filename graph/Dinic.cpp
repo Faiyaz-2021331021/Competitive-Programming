@@ -124,30 +124,6 @@ struct Dinic
         }
     }
 };
-int chk(int n)
-{
-    int low=1,high=n-1;
-    int val=0;
-    while(low<=high)
-    {
-        int mid = (low+high)/2;
-        int koto = mid*mid;
-        if(koto<=n)
-        {
-            val=mid;
-            low = mid+1;
-        }
-        else
-        {
-            high = mid-1;
-        }
-    }
-    if(val*val==n)
-    {
-        return 1;
-    }
-    return 0;
-}
 void solve()
 {
     int n,m;cin>>n>>m;
